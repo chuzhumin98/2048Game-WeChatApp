@@ -1,0 +1,13 @@
+/* components/grid/grid.wxss */
+.out_grid {
+  background: #8f7a66;
+  width: 170rpx;
+  height: 170rpx;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.in_grid {
+  background: #eeeeee;
+  margin: auto;
+}

@@ -1,0 +1,4 @@
+<!--components/grid/grid.wxml-->
+<view class='out_grid'>
+<view class='in_grid' style='width:{{150*eta}}rpx;height:{{150*eta}}rpx;'>{{gridType}}</view>
+</view>

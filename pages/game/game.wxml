@@ -1,0 +1,23 @@
+<view class='content'>
+  <view class='head_container'>
+    <view class='logo_container'>2048</view>
+    <view class='scores_container'>
+      <view class='score_container'><view>{{current_score}}</view></view>
+      <view class='best_score_container'><view>{{best_score}}</view></view>
+    </view>
+  </view>
+  <view class='nav_container'>
+    <label class='common_word'>Move the bricks to fight for 2048!</label>
+    <view class='nav_button'>quit</view>
+    <view class='nav_button'>exit</view>
+  </view>
+  <view class='game_grid'>
+    <view wx:for="{{states}}" wx:for-index="i" wx:for-item="itemI">
+      <view class='grid_row'>
+        <view wx:for="{{itemI}}" wx:for-index="j" wx:for-item="itemJ">
+          <grid id='grid_{{i}}_{{j}}' grid-type='{{states[i][j]}}'></grid>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

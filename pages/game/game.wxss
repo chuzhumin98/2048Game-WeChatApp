@@ -1,0 +1,75 @@
+.content {
+  background: #faf8ef;
+  height: 100vh;
+}
+
+.scores_container, .head_container, .nav_container, .grid_row {
+  flex-direction: row;
+  display: flex;
+}
+
+.nav_container {
+  margin-top: 10rpx;
+  align-items: center;
+}
+
+.logo_container {
+  color: #181515;
+  font-size: 100rpx;
+  font-weight: bold;
+  width: 400rpx;
+  text-align: center;
+}
+
+.score_container, .best_score_container {
+  font-size: 30rpx;
+  background: #bbada0;
+  text-align: center;
+  color: #ffffff;
+  width: 150rpx;
+  height: 90rpx;
+  line-height: 40rpx;
+  font-weight: bold;
+  margin: 10rpx;
+}
+
+.score_container::before {
+  font-size: 25rpx;
+  content: "score";
+  color: #eee4da;
+}
+
+.best_score_container::before {
+  font-size: 25rpx;
+  content: "best";
+  color: #eee4da;
+}
+
+.common_word {
+  font-size: 25rpx;
+  margin-left: 10rpx;
+  width: 500rpx;
+}
+
+.nav_button {
+  font-size: 30rpx;
+  background: #8f7a66;
+  text-align: center;
+  color: #ffffff;
+  width: 110rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  margin: 5rpx;
+  align-items: center;
+}
+
+.game_grid {
+  width: 750rpx;
+  height: 750rpx;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.grid_row {
+  margin-left: 25rpx;
+}
