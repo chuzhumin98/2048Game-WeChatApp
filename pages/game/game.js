@@ -1,14 +1,17 @@
 const grid_per_edge = 4; //define the grid number per edge
 /*
 the grids' state
-0-None, 2,4,8,···,65536-Number, 
-30x-Love, 50x-Break, 6-Gabbage
+0-None, 8,···,65536-Number, 
+2(4)01,2(4)02,2(4)03-different type of 2(4)
 */
 let grids_state = new Array(); 
+let temp_grids_state = new Array(); //temporal grids' state, using for store changes
 for (let i = 0; i < grid_per_edge; i++) {
   grids_state[i] = new Array();
+  temp_grids_state[i] = new Array();
   for (let j = 0; j < grid_per_edge; j++) {
     grids_state[i][j] = 0;
+    temp_grids_state[i][j] = 0;
   }
 }
 
@@ -34,7 +37,7 @@ Page({
       let idx = Math.floor(Math.random() * 16);
       let data_item = this.getStatesItemString(intDiv(idx, grid_per_edge), idx % grid_per_edge); //set for the change item string
       this.setData({
-        [data_item]: 2
+        [data_item]: 200 + this.getTypeOf2()
       })
       
     }
@@ -44,6 +47,18 @@ Page({
   //get the states array's item string
   getStatesItemString: function (idx, idy) {
     return 'states['+idx+']['+idy+']';
+  },
+
+  //randomly get the type of 2, 49% prob of type 1 and 2, 2% prob of type 3
+  getTypeOf2: function () {
+    let random_idx = Math.random() * 100;
+    if (random_idx < 49) {
+      return 1;
+    } else if (random_idx < 98) {
+      return 2;
+    } else {
+      return 3;
+    }
   },
 
   /*
@@ -72,6 +87,43 @@ Page({
     }
   },
 
+  //merge an array of grids
+  mergeGrids: function (grids) {
+    let index = 0; //visit index
+    while (index+1 < grids.length) {
+      //note that when integer divide 10 the value equals, they already is the same type
+      if (intDiv(grids[index], 10) === intDiv(grids[index+1], 10)) { 
+        if (intDiv(grids[index], 10) !== 20 && intDiv(grids[index], 10) !== 40) {
+          grids[index] *= 2;
+          grids = grids.slice(0,index+1).concat(grids.slice(index+2));
+          index++;
+        } else {
+          index++;
+        }
+      } else {
+        index++;
+      }
+    }
+    return grids;
+  },
+
+  //change the grids state based on the player's slide direction
+  handleSlide: function (direction) {
+    if (direction === 'left') {
+      for (let i = 0; i < grid_per_edge; i++) {
+        let cache_array = new Array();
+        for (let j = 0; j < grid_per_edge; j++) {
+          if (this.data.states[i][j] > 0) {
+            cache_array[cache_array.length] = this.data.states[i][j];
+          }
+        }
+        cache_array =  this.mergeGrids(cache_array);
+        console.log(cache_array);
+      }
+      
+    }
+  },
+
   onTouchStart: function (event) {
     touch_startX = event.touches[0].clientX; //record the start touch position
     touch_startY = event.touches[0].clientY;
@@ -84,6 +136,9 @@ Page({
       is_ontouch = false; //set to prepare next slide process
       let direction = this.getSlideDirection(touch_startX, touch_startY, event.changedTouches[0].clientX, event.changedTouches[0].clientY);
       console.log(direction);
+      if (direction !== 'none') {
+        this.handleSlide(direction);
+      }
     }
     //console.log('end at '+event.changedTouches[0].clientX + ',' + event.changedTouches[0].clientY);
   },
