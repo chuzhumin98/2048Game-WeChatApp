@@ -33,7 +33,7 @@ Page({
 
   onLoad: function (options) {
     //when game loaded, randomly generate 1-2 elements
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 10; i++) {
       let idx = Math.floor(Math.random() * 16);
       let data_item = this.getStatesItemString(intDiv(idx, grid_per_edge), idx % grid_per_edge); //set for the change item string
       this.setData({
@@ -94,15 +94,34 @@ Page({
       //note that when integer divide 10 the value equals, they already is the same type
       if (intDiv(grids[index], 10) === intDiv(grids[index+1], 10)) { 
         if (intDiv(grids[index], 10) !== 20 && intDiv(grids[index], 10) !== 40) {
-          grids[index] *= 2;
-          grids = grids.slice(0,index+1).concat(grids.slice(index+2));
-          index++;
+          grids[index] *= 2;         
+        } else if (intDiv(grids[index], 10) === 20) {
+          //type 3 is a strong type
+          if (grids[index] % 10 === 3 || grids[index+1] % 10 === 3) {
+            grids[index] = 403;
+          } else if (grids[index] === grids[index+1]) { //when they're both type 1 or 2, then get 4 of type 1
+            grids[index] = 401;
+          } else { //else get 4 of type 2
+            grids[index] = 402;
+          }
         } else {
-          index++;
+          //both type 3 get the very strong effect
+          if (grids[index] % 10 === 3 && grids[index+1] % 10 === 3) {
+            if (index === 0) {
+              grids[index] = 16; //when they're the head of array, double them
+            } else { //else double the front one
+              grids[index-1] *= 2;
+              grids[index] = 8;
+            }
+          } else if ((grids[index] % 10) + (grids[index+1] % 10) === 3) { //a+b=1+2(or 2+1) = 3
+            grids[index] = 203; //different type of 4(type 1 and 2) generate 2 of type 3  
+          } else { //else merge to 8
+            grids[index] = 8;
+          }
         }
-      } else {
-        index++;
+        grids = grids.slice(0, index + 1).concat(grids.slice(index + 2)); 
       }
+      index++;
     }
     return grids;
   },
@@ -118,9 +137,78 @@ Page({
           }
         }
         cache_array =  this.mergeGrids(cache_array);
-        console.log(cache_array);
+        //console.log(cache_array);
+        for (let j = 0; j < cache_array.length; j++) {
+          temp_grids_state[i][j] = cache_array[j];
+        }
+        for (let j = cache_array.length; j < grid_per_edge; j++) {
+          temp_grids_state[i][j] = 0;
+        }
       }
-      
+    } else if (direction === 'right') {
+      for (let i = 0; i < grid_per_edge; i++) {
+        let cache_array = new Array();
+        for (let j = grid_per_edge-1; j >= 0; j--) {
+          if (this.data.states[i][j] > 0) {
+            cache_array[cache_array.length] = this.data.states[i][j];
+          }
+        }
+        cache_array = this.mergeGrids(cache_array);
+        //console.log(cache_array);
+        for (let j = 0; j < cache_array.length; j++) {
+          temp_grids_state[i][grid_per_edge-1-j] = cache_array[j];
+        }
+        for (let j = cache_array.length; j < grid_per_edge; j++) {
+          temp_grids_state[i][grid_per_edge-1-j] = 0;
+        }
+      }
+    } else if (direction === 'up') {
+      for (let i = 0; i < grid_per_edge; i++) {
+        let cache_array = new Array();
+        for (let j = 0; j < grid_per_edge; j++) {
+          if (this.data.states[j][i] > 0) {
+            cache_array[cache_array.length] = this.data.states[j][i];
+          }
+        }
+        cache_array = this.mergeGrids(cache_array);
+        //console.log(cache_array);
+        for (let j = 0; j < cache_array.length; j++) {
+          temp_grids_state[j][i] = cache_array[j];
+        }
+        for (let j = cache_array.length; j < grid_per_edge; j++) {
+          temp_grids_state[j][i] = 0;
+        }
+      }
+    } else if (direction === 'down') {
+      for (let i = 0; i < grid_per_edge; i++) {
+        let cache_array = new Array();
+        for (let j = grid_per_edge - 1; j >= 0; j--) {
+          if (this.data.states[j][i] > 0) {
+            cache_array[cache_array.length] = this.data.states[j][i];
+          }
+        }
+        cache_array = this.mergeGrids(cache_array);
+        //console.log(cache_array);
+        for (let j = 0; j < cache_array.length; j++) {
+          temp_grids_state[grid_per_edge - 1 - j][i] = cache_array[j];
+        }
+        for (let j = cache_array.length; j < grid_per_edge; j++) {
+          temp_grids_state[grid_per_edge - 1 - j][i] = 0;
+        }
+      }
+    } else {
+      return;
+    }
+    for (let i = 0; i < grid_per_edge; i++) {
+      for (let j = 0; j < grid_per_edge; j++) {
+        //update only when changed
+        if (temp_grids_state[i][j] !== this.data.states[i][j]) {
+          let data_item = this.getStatesItemString(i, j);
+          this.setData({
+            [data_item]: temp_grids_state[i][j]
+          });
+        }
+      }
     }
   },
 
