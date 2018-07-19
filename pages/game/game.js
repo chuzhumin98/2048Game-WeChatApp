@@ -33,7 +33,7 @@ Page({
 
   onLoad: function (options) {
     //when game loaded, randomly generate 1-2 elements
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 2; i++) {
       let idx = Math.floor(Math.random() * 16);
       let data_item = this.getStatesItemString(intDiv(idx, grid_per_edge), idx % grid_per_edge); //set for the change item string
       this.setData({
@@ -84,6 +84,25 @@ Page({
           return 'up';
         }
       }
+    }
+  },
+
+  //get a random free position, return {x, y}, null for no free position to set
+  getRandomPosition: function () {
+    let free_grids = new Array();
+    for (let i = 0; i < grid_per_edge; i++) {
+      for (let j = 0; j < grid_per_edge; j++) {
+        if (this.data.states[i][j] === 0) {
+          let position = {'x' : i, 'y' : j};
+          free_grids[free_grids.length] = position;
+        }
+      }
+    }
+    if (free_grids.length === 0) {
+      return null;
+    } else {
+      let random_index = Math.floor(Math.random() * free_grids.length);
+      return free_grids[random_index];
     }
   },
 
@@ -199,15 +218,27 @@ Page({
     } else {
       return;
     }
+    let isMoved = false; //record for the game state change or not
     for (let i = 0; i < grid_per_edge; i++) {
       for (let j = 0; j < grid_per_edge; j++) {
         //update only when changed
         if (temp_grids_state[i][j] !== this.data.states[i][j]) {
+          isMoved = true;
           let data_item = this.getStatesItemString(i, j);
           this.setData({
             [data_item]: temp_grids_state[i][j]
           });
         }
+      }
+    }
+    if (isMoved) { //when state changed, set for a random 2
+      let position = this.getRandomPosition(); //random position to set for new 2
+      console.log(position);
+      if (position !== null) { //null represents no free grid
+        let data_item = this.getStatesItemString(position.x, position.y);
+        this.setData({
+          [data_item]: 200+this.getTypeOf2()
+        })
       }
     }
   },
