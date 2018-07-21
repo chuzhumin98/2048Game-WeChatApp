@@ -3,11 +3,81 @@
   background: #8f7a66;
   width: 170rpx;
   height: 170rpx;
-  display: table-cell;
+  line-height: 170rpx;
   vertical-align: middle;
+  display: inline-block;
+  text-align: center;
 }
 
-.in_grid {
+.in_grid, .grid_0 {
   background: #eeeeee;
+  text-align: center;
   margin: auto;
+  vertical-align: middle;
+  display: inline-block; 
+}
+
+.grid_201 {
+  background: #eee4da;
+  color: #000000;
+}
+
+.grid_202 {
+  background: #000000;
+  color: #eee4da;
+}
+
+.grid_203, .grid_403 {
+  background: #ff00ff;
+  color: #ffffff;
+}
+
+.grid_401 {
+  background: #ede0c8;
+  color: #000000;
+}
+
+.grid_402 {
+  background: #000000;
+  color: #ede0c8;
+}
+
+.grid_8 {
+  background: #f2b179;
+  color: #ffffff;
+}
+
+.grid_16 {
+  background: #f59664;
+  color: #ffffff;
+}
+
+.grid_32 {
+  background: #f57d5f;
+  color: #ffffff;
+}
+
+.grid_64 {
+  background: #f55f3c;
+  color: #ffffff;
+}
+
+.grid_128 {
+  background: #edcf72;
+  color: #ffffff;
+}
+
+.grid_256, .grid_512 {
+  background: #edcc61;
+  color: #ffffff;
+}
+
+.grid_1024, .grid_2048, .grid_4096, .grid_8192 {
+  background: #edcc61;
+  color: #ffffff;
+}
+
+.grid_16384, .grid_32768, .grid_65536 {
+  background: #edcc61;
+  color: #ffffff;
 }

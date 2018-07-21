@@ -38,9 +38,20 @@ Page({
       let data_item = this.getStatesItemString(intDiv(idx, grid_per_edge), idx % grid_per_edge); //set for the change item string
       this.setData({
         [data_item]: 200 + this.getTypeOf2()
-      })
-      
+      });
     }
+    /** 
+    //init for test
+    let set_array = [[201,202,203,401],[402,403,8,16],[32,64,128,256],[16384,32768,65536,16384]];
+    for (let i = 0; i < grid_per_edge; i++) {
+      for (let j = 0; j < grid_per_edge; j++) {
+        let data_item = this.getStatesItemString(i, j);
+        this.setData({
+          [data_item]: set_array[i][j]
+        });
+      }
+    }
+    */
     console.log(this.data.states);
   },
 
@@ -257,6 +268,8 @@ Page({
       console.log(direction);
       if (direction !== 'none') {
         this.handleSlide(direction);
+        let grid = this.selectComponent("#grid_0_0");
+        grid.setAnimation();
       }
     }
     //console.log('end at '+event.changedTouches[0].clientX + ',' + event.changedTouches[0].clientY);

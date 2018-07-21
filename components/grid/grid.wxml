@@ -1,4 +1,4 @@
 <!--components/grid/grid.wxml-->
 <view class='out_grid'>
-<view class='in_grid' style='width:{{150*eta}}rpx;height:{{150*eta}}rpx;'>{{gridType}}</view>
+<view class='in_grid grid_{{gridType}}' style='width:{{150*eta}}rpx;height:{{150*eta}}rpx;line-height:{{150*eta}}rpx;font-size:{{_font_sizes[gridType]*eta}}rpx;'>{{(gridType >= 201 && gridType <= 203) ? 2 : ((gridType >= 401 && gridType <= 403) ? 4 : (gridType === 0 ? '' : gridType)) }}</view>
 </view>
