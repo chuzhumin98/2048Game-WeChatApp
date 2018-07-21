@@ -119,10 +119,12 @@ Page({
 
   //merge an array of grids
   mergeGrids: function (grids) {
+    let merge_indexes = new Array(); //indexes with merged
     let index = 0; //visit index
     while (index+1 < grids.length) {
       //note that when integer divide 10 the value equals, they already is the same type
-      if (intDiv(grids[index], 10) === intDiv(grids[index+1], 10)) { 
+      if (intDiv(grids[index], 10) === intDiv(grids[index+1], 10)) {
+        merge_indexes[merge_indexes.length] = index; 
         if (intDiv(grids[index], 10) !== 20 && intDiv(grids[index], 10) !== 40) {
           grids[index] *= 2;         
         } else if (intDiv(grids[index], 10) === 20) {
@@ -153,11 +155,12 @@ Page({
       }
       index++;
     }
-    return grids;
+    return [grids, merge_indexes];
   },
 
   //change the grids state based on the player's slide direction
   handleSlide: function (direction) {
+    let animate_positions = new Array(); //the positions that need animate
     if (direction === 'left') {
       for (let i = 0; i < grid_per_edge; i++) {
         let cache_array = new Array();
@@ -166,7 +169,12 @@ Page({
             cache_array[cache_array.length] = this.data.states[i][j];
           }
         }
-        cache_array =  this.mergeGrids(cache_array);
+        let results = this.mergeGrids(cache_array);
+        cache_array =  results[0];
+        let indexes = results[1];
+        for (let j = 0; j < indexes.length; j++) {
+          animate_positions[animate_positions.length] = {x: i, y: indexes[j]};
+        }
         //console.log(cache_array);
         for (let j = 0; j < cache_array.length; j++) {
           temp_grids_state[i][j] = cache_array[j];
@@ -183,7 +191,12 @@ Page({
             cache_array[cache_array.length] = this.data.states[i][j];
           }
         }
-        cache_array = this.mergeGrids(cache_array);
+        let results = this.mergeGrids(cache_array);
+        cache_array = results[0];
+        let indexes = results[1];
+        for (let j = 0; j < indexes.length; j++) {
+          animate_positions[animate_positions.length] = { x: i, y: grid_per_edge - 1 - indexes[j] };
+        }
         //console.log(cache_array);
         for (let j = 0; j < cache_array.length; j++) {
           temp_grids_state[i][grid_per_edge-1-j] = cache_array[j];
@@ -200,7 +213,12 @@ Page({
             cache_array[cache_array.length] = this.data.states[j][i];
           }
         }
-        cache_array = this.mergeGrids(cache_array);
+        let results = this.mergeGrids(cache_array);
+        cache_array = results[0];
+        let indexes = results[1];
+        for (let j = 0; j < indexes.length; j++) {
+          animate_positions[animate_positions.length] = { x: indexes[j], y: i };
+        }
         //console.log(cache_array);
         for (let j = 0; j < cache_array.length; j++) {
           temp_grids_state[j][i] = cache_array[j];
@@ -217,7 +235,12 @@ Page({
             cache_array[cache_array.length] = this.data.states[j][i];
           }
         }
-        cache_array = this.mergeGrids(cache_array);
+        let results = this.mergeGrids(cache_array);
+        cache_array = results[0];
+        let indexes = results[1];
+        for (let j = 0; j < indexes.length; j++) {
+          animate_positions[animate_positions.length] = { x: grid_per_edge - 1 - indexes[j], y: i };
+        }
         //console.log(cache_array);
         for (let j = 0; j < cache_array.length; j++) {
           temp_grids_state[grid_per_edge - 1 - j][i] = cache_array[j];
@@ -245,6 +268,9 @@ Page({
     if (isMoved) { //when state changed, set for a random 2
       let position = this.getRandomPosition(); //random position to set for new 2
       console.log(position);
+      let item = this.selectComponent('#grid_' + position.x + '_' + position.y);
+      item.setAnimation();
+      animate_positions[animate_positions.length] = position;
       if (position !== null) { //null represents no free grid
         let data_item = this.getStatesItemString(position.x, position.y);
         this.setData({
@@ -252,6 +278,12 @@ Page({
         })
       }
     }
+    /** 
+    for (let i = 0; i < animate_positions.length; i++) {
+      let item = this.selectComponent('#grid_'+animate_positions[i].x+'_'+animate_positions[i].y);
+      item.setAnimation();
+    }
+    */
   },
 
   onTouchStart: function (event) {
@@ -268,8 +300,6 @@ Page({
       console.log(direction);
       if (direction !== 'none') {
         this.handleSlide(direction);
-        let grid = this.selectComponent("#grid_0_0");
-        grid.setAnimation();
       }
     }
     //console.log('end at '+event.changedTouches[0].clientX + ',' + event.changedTouches[0].clientY);

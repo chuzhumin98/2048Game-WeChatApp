@@ -50,7 +50,7 @@ Component({
           eta: animation_eta_arrays[index]
         });
         index++;
-      }, 200);
+      }, 80);
 
     }
   }
