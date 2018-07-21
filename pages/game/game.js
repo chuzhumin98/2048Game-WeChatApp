@@ -253,6 +253,12 @@ Page({
       return;
     }
     let isMoved = false; //record for the game state change or not
+
+    for (let i = 0; i < animate_positions.length; i++) {
+      let item = this.selectComponent('#grid_' + animate_positions[i].x + '_' + animate_positions[i].y);
+      item.setAnimation();
+    }
+
     for (let i = 0; i < grid_per_edge; i++) {
       for (let j = 0; j < grid_per_edge; j++) {
         //update only when changed
@@ -278,12 +284,7 @@ Page({
         })
       }
     }
-    /** 
-    for (let i = 0; i < animate_positions.length; i++) {
-      let item = this.selectComponent('#grid_'+animate_positions[i].x+'_'+animate_positions[i].y);
-      item.setAnimation();
-    }
-    */
+    
   },
 
   onTouchStart: function (event) {
