@@ -73,3 +73,20 @@
 .grid_row {
   margin-left: 25rpx;
 }
+
+.gameover {
+  font-size: 100rpx;
+  position: absolute;
+  top: 400rpx;
+  margin-left: 100rpx;
+}
+
+.gameover-quit {
+  font-size: 100rpx;
+  position: absolute;
+  top: 600rpx;
+  margin-left: 240rpx;
+  padding: 10rpx;
+  background: #1b7cec;
+  color: #ffffff;
+}

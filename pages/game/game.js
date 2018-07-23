@@ -29,12 +29,21 @@ Page({
     current_score: 1234,
     best_score: 5678,
     states: grids_state,
+    game_over: false
   },
 
-  onLoad: function (options) {
+  initSet: function () {
     this.setData({
-      current_score: 0
+      current_score: 0,
     }); //set zero for current score
+    for (let i = 0; i < grid_per_edge; i++) {
+      for (let j = 0; j < grid_per_edge; j++) {
+        let data_item = this.getStatesItemString(i, j);
+        this.setData({
+          [data_item]: 0
+        });
+      }
+    }
     //when game loaded, randomly generate 1-2 elements
     for (let i = 0; i < 2; i++) {
       let idx = Math.floor(Math.random() * 16);
@@ -43,7 +52,15 @@ Page({
         [data_item]: 200 + this.getTypeOf2()
       });
     }
-    
+  },
+
+  onLoad: function (options) {
+    this.initSet(); //initial set for the game
+
+    this.setData({
+      best_score: 0
+    });
+    /** 
     //init for test
     let set_array = [[201,202,203,401],[402,403,8,16],[32,64,128,256],[16384,32768,65536,16384]];
     for (let i = 0; i < grid_per_edge; i++) {
@@ -54,7 +71,7 @@ Page({
         });
       }
     }
-    
+    */
     console.log(this.data.states);
   },
 
@@ -302,11 +319,18 @@ Page({
           [data_item]: 200+this.getTypeOf2()
         })
       }
+      if (this.data.best_score < this.data.current_score) {
+        this.setData({
+          best_score: this.data.current_score
+        })
+      }
     }
     if (this.judgeGameOver()) {
       console.log('game over');
+      this.setData({
+        game_over: true
+      });
     }
-    
   },
   
   //judge the game is over or not
@@ -323,7 +347,7 @@ Page({
         if (intDiv(this.data.states[i][j], 10) === intDiv(this.data.states[i][j+1],10)) {
           return false;
         }
-        if (this.data.states[j][i] === this.data.states[j+1][i]) {
+        if (intDiv(this.data.states[j][i],10) === intDiv(this.data.states[j+1][i],10)) {
           return false;
         }
       }
@@ -352,5 +376,13 @@ Page({
 
   onTouchCancel: function (event) {
     is_ontouch = false; //drop this touch process
+  },
+
+  onQuitEvent: function (event) {
+    this.setData({
+      game_over: false
+    });
+    this.initSet();
   }
+
 })
