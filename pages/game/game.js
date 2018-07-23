@@ -28,10 +28,13 @@ Page({
   data: {
     current_score: 1234,
     best_score: 5678,
-    states: grids_state
+    states: grids_state,
   },
 
   onLoad: function (options) {
+    this.setData({
+      current_score: 0
+    }); //set zero for current score
     //when game loaded, randomly generate 1-2 elements
     for (let i = 0; i < 2; i++) {
       let idx = Math.floor(Math.random() * 16);
@@ -40,7 +43,7 @@ Page({
         [data_item]: 200 + this.getTypeOf2()
       });
     }
-    /** 
+    
     //init for test
     let set_array = [[201,202,203,401],[402,403,8,16],[32,64,128,256],[16384,32768,65536,16384]];
     for (let i = 0; i < grid_per_edge; i++) {
@@ -51,7 +54,7 @@ Page({
         });
       }
     }
-    */
+    
     console.log(this.data.states);
   },
 
@@ -126,8 +129,16 @@ Page({
       if (intDiv(grids[index], 10) === intDiv(grids[index+1], 10)) {
         merge_indexes[merge_indexes.length] = index; 
         if (intDiv(grids[index], 10) !== 20 && intDiv(grids[index], 10) !== 40) {
+          let new_score = this.data.current_score + grids[index]*2;
+          this.setData({
+            current_score: new_score
+          });
           grids[index] *= 2;         
         } else if (intDiv(grids[index], 10) === 20) {
+          let new_score = this.data.current_score + 4;
+          this.setData({
+            current_score: new_score
+          });
           //type 3 is a strong type
           if (grids[index] % 10 === 3 || grids[index+1] % 10 === 3) {
             grids[index] = 403;
@@ -137,6 +148,10 @@ Page({
             grids[index] = 402;
           }
         } else {
+          let new_score = this.data.current_score + 8;
+          this.setData({
+            current_score: new_score
+          });
           //both type 3 get the very strong effect
           if (grids[index] % 10 === 3 && grids[index+1] % 10 === 3) {
             if (index === 0) {
@@ -278,13 +293,42 @@ Page({
       item.setAnimation();
       animate_positions[animate_positions.length] = position;
       if (position !== null) { //null represents no free grid
+        let new_score = this.data.current_score + 2;
+        this.setData({
+          current_score: new_score
+        });
         let data_item = this.getStatesItemString(position.x, position.y);
         this.setData({
           [data_item]: 200+this.getTypeOf2()
         })
       }
     }
+    if (this.judgeGameOver()) {
+      console.log('game over');
+    }
     
+  },
+  
+  //judge the game is over or not
+  judgeGameOver: function () {
+    for (let i = 0; i < grid_per_edge; i++) {
+      for (let j = 0; j < grid_per_edge; j++) {
+        if (this.data.states[i][j] === 0) {
+          return false;
+        }
+      }
+    }
+    for (let i = 0; i < grid_per_edge; i++) {
+      for (let j = 0; j < grid_per_edge-1; j++) {
+        if (intDiv(this.data.states[i][j], 10) === intDiv(this.data.states[i][j+1],10)) {
+          return false;
+        }
+        if (this.data.states[j][i] === this.data.states[j+1][i]) {
+          return false;
+        }
+      }
+    }
+    return true;
   },
 
   onTouchStart: function (event) {
