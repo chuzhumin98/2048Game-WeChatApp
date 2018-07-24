@@ -55,6 +55,22 @@ Page({
   },
 
   onLoad: function (options) {
+    wx.request({
+      url: "https://chuzm15.iterator-traits.com/query",
+      method: "GET",
+      data: {
+
+      },
+      header: {
+
+      },
+
+      success: function (res) {
+        console.log(res);
+      }
+
+    });
+
     this.initSet(); //initial set for the game
 
     this.setData({
@@ -383,6 +399,7 @@ Page({
       game_over: false
     });
     this.initSet();
-  }
+  },
+
 
 })

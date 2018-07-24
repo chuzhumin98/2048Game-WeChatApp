@@ -8,7 +8,7 @@
   </view>
   <view class='nav_container'>
     <label class='common_word'>Move the bricks to fight for 2048!</label>
-    <view class='nav_button'>quit</view>
+    <view class='nav_button' catchtap='onQuitEvent'>quit</view>
     <view class='nav_button'>exit</view>
   </view>
   <view class='game_grid' catchtouchstart='onTouchStart' catchtouchend='onTouchEnd' catchtouchcancel='onTouchCancel'>
