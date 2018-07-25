@@ -5,7 +5,7 @@ let database = new sqlite3.Database("game.db", function(e){
 });
 
 let create_player = "CREATE TABLE PLAYER("
-	   +"ID INT PRIMARY KEY     NOT NULL,"
+	   +"ID CHAR(60) PRIMARY KEY     NOT NULL,"
 	   +"BESTSCORE           INT    NOT NULL"
 	   +");" //the command to create player table
 
@@ -14,7 +14,7 @@ database.run(create_player, function(e) {
 });
 
 let create_state = "CREATE TABLE STATE("
-	   +"ID INT PRIMARY KEY     NOT NULL,"
+	   +"ID CHAR(60) PRIMARY KEY     NOT NULL,"
 	   +"CURRENTSCORE           INT    NOT NULL,"
 	   +"GRID00 INT  NOT NULL,"
 	   +"GRID01 INT  NOT NULL,"

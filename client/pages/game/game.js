@@ -27,8 +27,8 @@ const app = getApp();
 
 Page({
   data: {
-    current_score: 1234,
-    best_score: 5678,
+    current_score: 0,
+    best_score: 0,
     states: grids_state,
     game_over: false
   },
@@ -57,6 +57,8 @@ Page({
 
   onLoad: function (options) {
     app.userInfoReadyCallback = res => {
+      let that = this;
+      let that_best_score = 0;
       if (res != '') { //wait for get openid, then load the page
         console.log(app.globalData.openid);
         wx.request({
@@ -71,15 +73,16 @@ Page({
 
           success: function (res) {
             console.log(res);
+            that_best_score = res.data.BESTSCORE;
+            that.setData({
+              best_score: that_best_score
+            });
           }
 
         });
 
         this.initSet(); //initial set for the game
 
-        this.setData({
-          best_score: 0
-        });
         /** 
         //init for test
         let set_array = [[201,202,203,401],[402,403,8,16],[32,64,128,256],[16384,32768,65536,16384]];
@@ -95,6 +98,30 @@ Page({
         console.log(this.data.states);
       }
     }
+  },
+
+  onUnload: function (options) {
+    console.log('now is unload');
+
+  },
+
+  onHide: function (options) {
+    console.log('now is unHide');
+    wx.request({
+      url: "https://chuzm15.iterator-traits.com/record?id=" + app.globalData.openid + "&best=" + this.data.best_score,
+      method: "GET",
+      data: {
+
+      },
+      header: {
+
+      },
+
+      success: function (res) {
+        console.log(res);
+      }
+
+    });
   },
 
   //get the states array's item string
