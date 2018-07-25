@@ -12,9 +12,23 @@ App({
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         wx.getUserInfo({
           success: function (res_login) {
-            console.log(res);
+            console.log(res.code);
             console.log(res_login);
-            
+            wx.request({
+              url: "https://chuzm15.iterator-traits.com/code?code="+res.code,
+              method: "GET",
+              data: {
+
+              },
+              header: {
+
+              },
+
+              success: function (res_code) {
+                console.log(res_code);
+              }
+
+            });
           }
         })
       }

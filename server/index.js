@@ -20,7 +20,28 @@ const record = (ctx, next) => {
 	ctx.response.body = "Welcome to record";
 	ctx.response.type = "text/plain";
 	console.log("visit for record");
-}
+};
+
+const code = (ctx, next) => {	
+	const request = require('sync-request');
+	let user_openid = null; //save for user's openid
+	const query = ctx.request.query;
+	let codes = query.code;
+	
+	const appId = "wx147218704d32ac2b";
+	const secret = "fba3ccd510c770441df667a80a915e14";
+	console.log('code:'+codes);
+	let res = request('GET', 'https://api.weixin.qq.com/sns/jscode2session?appid=' 
+			+ appId + '&secret=' + secret + '&js_code=' 
+			+ codes + '&grant_type=authorization_code');
+	user_openid = JSON.parse(res.getBody().toString()).openid;
+	console.log('openid:'+user_openid);
+	
+	ctx.response.status = 200;
+	ctx.response.type = 'application/json';
+	ctx.response.body = {openid: user_openid};
+	console.log('send for client');
+}; //get for user's openid
 
 
 //SSL options
@@ -35,5 +56,6 @@ https.createServer(options, app.callback()).listen(443);
 
 app.use(route.get('/query', query));
 app.use(route.get('/record', record));
+app.use(route.get('/code', code));
 
 console.log('https server is running');
