@@ -4,16 +4,52 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const enforceHttps = require('koa-sslify');
+const sqlite3 = require('sqlite3');
 
 const app = new koa();
+
+let database = new sqlite3.Database("game.db", function(e){
+	if (e) throw e;
+});
 
 //Force HTTPS on all page
 app.use(enforceHttps());
 
+/**
+let insert_command = 'INSERT INTO PLAYER (ID, BESTSCORE)'
+		+ 'VALUES ("Ahfuieuigei", 0);'
+let result_insert = database.run(insert_command)
+*/
+
+let queryId = 'SELECT BESTSCORE '
+	+ 'FROM PLAYER ' 
+	+ 'WHERE ID = ' + '"Ahfuieuigei"' + ';';
+database.all(queryId, (err, results) => {
+	console.log(results);
+});
+
 const query = (ctx, next) => {
-	ctx.response.body = "Welcome to query";
-	ctx.response.type = "text/plain";
-	console.log("visit for query");
+	const query = ctx.request.query;
+	let query_command = 'SELECT BESTSCORE '
+	+ 'FROM PLAYER ' 
+	+ 'WHERE ID = "' + query.id + '";';
+	let best_score = 0;
+	database.all(query_command, (err, results) => {
+		console.log(results);
+		if (results.length === 0) {
+			let insert_command = 'INSERT INTO PLAYER (ID, BESTSCORE)'
+				+ 'VALUES ("' + query.id + '", 0);' //default to set score with 0
+			database.run(insert_command, function(e) {
+				console.log(e);
+			});
+		} else {
+			best_score = results[0].BESTSCORE; //set the best score with the record in database
+		}
+	});
+	ctx.response.body = {BESTSCORE: best_score};
+	ctx.response.type = 'application/json';
+	ctx.response.status = 200;
+	console.log("best_score: "+best_score);
 };
 
 const record = (ctx, next) => {

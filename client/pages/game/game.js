@@ -23,6 +23,7 @@ function intDiv(num, den) {
   return Math.floor(num/den); //simplify as always positive condition
 }
 
+const app = getApp();
 
 Page({
   data: {
@@ -55,40 +56,45 @@ Page({
   },
 
   onLoad: function (options) {
-    wx.request({
-      url: "https://chuzm15.iterator-traits.com/query",
-      method: "GET",
-      data: {
+    app.userInfoReadyCallback = res => {
+      if (res != '') { //wait for get openid, then load the page
+        console.log(app.globalData.openid);
+        wx.request({
+          url: "https://chuzm15.iterator-traits.com/query?id=" + app.globalData.openid,
+          method: "GET",
+          data: {
 
-      },
-      header: {
+          },
+          header: {
 
-      },
+          },
 
-      success: function (res) {
-        console.log(res);
-      }
+          success: function (res) {
+            console.log(res);
+          }
 
-    });
-
-    this.initSet(); //initial set for the game
-
-    this.setData({
-      best_score: 0
-    });
-    /** 
-    //init for test
-    let set_array = [[201,202,203,401],[402,403,8,16],[32,64,128,256],[16384,32768,65536,16384]];
-    for (let i = 0; i < grid_per_edge; i++) {
-      for (let j = 0; j < grid_per_edge; j++) {
-        let data_item = this.getStatesItemString(i, j);
-        this.setData({
-          [data_item]: set_array[i][j]
         });
+
+        this.initSet(); //initial set for the game
+
+        this.setData({
+          best_score: 0
+        });
+        /** 
+        //init for test
+        let set_array = [[201,202,203,401],[402,403,8,16],[32,64,128,256],[16384,32768,65536,16384]];
+        for (let i = 0; i < grid_per_edge; i++) {
+          for (let j = 0; j < grid_per_edge; j++) {
+            let data_item = this.getStatesItemString(i, j);
+            this.setData({
+              [data_item]: set_array[i][j]
+            });
+          }
+        }
+        */
+        console.log(this.data.states);
       }
     }
-    */
-    console.log(this.data.states);
   },
 
   //get the states array's item string
