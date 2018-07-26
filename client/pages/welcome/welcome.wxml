@@ -3,7 +3,7 @@
   <view>
    <image src="/video/demo.gif" class='demo_gif'></image>
   </view>
-  <view class="usermotto">
+  <view>
     <button type='primary' style='width:300rpx;' catchtap='onStartGame'>开始游戏</button>
   </view>
 </view>

@@ -9,7 +9,7 @@
   <view class='nav_container'>
     <label class='common_word'>Move the bricks to fight for 2048!</label>
     <view class='nav_button' catchtap='onQuitEvent'>quit</view>
-    <view class='nav_button'>exit</view>
+    <view class='nav_button' catchtap='onExitEvent'>exit</view>
   </view>
   <view class='game_grid' catchtouchstart='onTouchStart' catchtouchend='onTouchEnd' catchtouchcancel='onTouchCancel'>
     <view wx:for="{{states}}" wx:for-index="i" wx:for-item="itemI">
@@ -20,6 +20,7 @@
       </view>
     </view>
   </view>
+  <audio id='score-audio'></audio>
 </view>
 <view wx:if="{{game_over}}">
 <view class='gameover'>Game Over</view>

@@ -55,6 +55,11 @@ Page({
     }
   },
 
+  onReady: function (options) {
+    this.audioCtx = wx.createAudioContext('score-audio');
+    this.audioCtx.setSrc('http://gddx.sc.chinaz.com/Files/DownLoad/sound1/201711/9439.wav');
+  },
+
   onLoad: function (options) {
     let that = this;
     let that_best_score = 0;
@@ -353,6 +358,10 @@ Page({
       }
     }
     if (isMoved) { //when state changed, set for a random 2
+      this.audioCtx.seek(0);
+      this.audioCtx.play();
+      //const backgroundAudioManager = wx.getBackgroundAudioManager();
+      //backgroundAudioManager.src = 'http://gddx.sc.chinaz.com/Files/DownLoad/sound1/201711/9439.wav'; 
       let position = this.getRandomPosition(); //random position to set for new 2
       console.log(position);
       let item = this.selectComponent('#grid_' + position.x + '_' + position.y);
@@ -434,5 +443,10 @@ Page({
     this.initSet();
   },
 
+  onExitEvent: function (event) {
+    wx.navigateBack({
+      delta: 1
+    });
+  }
 
 })

@@ -5,6 +5,7 @@ App({
   },
 
   onLaunch: function () {
+    wx.clearStorageSync(); //clear user's local cache
     // 展示本地存储能力
     let logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -31,9 +32,6 @@ App({
                 console.log('openid:'+res_code.data.openid);
                 const app = getApp();
                 app.globalData.openid = res_code.data.openid;
-                if (app.userInfoReadyCallback) {
-                  app.userInfoReadyCallback(res_code)
-                }
               }
 
             });

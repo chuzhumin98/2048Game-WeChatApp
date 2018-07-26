@@ -58,6 +58,11 @@ const record = (ctx, next) => {
 	let query_command = 'SELECT BESTSCORE '
 		+ 'FROM PLAYER ' 
 		+ 'WHERE ID = "' + query.id + '";';
+	if (best_scores[query.id] === undefined) {
+		best_scores[query.id] = parseInt(query.best);
+	} else {
+		best_scores[query.id] = Math.max(best_scores[query.id], parseInt(query.best));
+	}
 	database.all(query_command, (err, results) => {
 		if (results.length === 0) {
 			let insert_command = 'INSERT INTO PLAYER (ID, BESTSCORE)'
