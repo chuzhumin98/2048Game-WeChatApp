@@ -1,7 +1,7 @@
 {
   "pages":[
-    "pages/game/game",
     "pages/index/index",
+    "pages/game/game",
     "pages/logs/logs"
   ],
   "window":{

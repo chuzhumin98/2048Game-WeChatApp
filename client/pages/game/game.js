@@ -56,57 +56,47 @@ Page({
   },
 
   onLoad: function (options) {
-    app.userInfoReadyCallback = res => {
-      let that = this;
-      let that_best_score = 0;
-      if (res != '') { //wait for get openid, then load the page
-        console.log(app.globalData.openid);
-        wx.request({
-          url: "https://chuzm15.iterator-traits.com/query?id=" + app.globalData.openid,
-          method: "GET",
-          data: {
+    let that = this;
+    let that_best_score = 0;
+    console.log(app.globalData.openid);
+    wx.request({
+      url: "https://chuzm15.iterator-traits.com/query?id=" + app.globalData.openid,
+      method: "GET",
+      data: {
 
-          },
-          header: {
+      },
+      header: {
 
-          },
+      },
 
-          success: function (res) {
-            console.log(res);
-            that_best_score = res.data.BESTSCORE;
-            that.setData({
-              best_score: that_best_score
-            });
-          }
-
+      success: function (res) {
+        console.log(res);
+        that_best_score = res.data.BESTSCORE;
+        that.setData({
+          best_score: that_best_score
         });
+      }
 
-        this.initSet(); //initial set for the game
+    });
 
-        /** 
-        //init for test
-        let set_array = [[201,202,203,401],[402,403,8,16],[32,64,128,256],[16384,32768,65536,16384]];
-        for (let i = 0; i < grid_per_edge; i++) {
-          for (let j = 0; j < grid_per_edge; j++) {
-            let data_item = this.getStatesItemString(i, j);
-            this.setData({
-              [data_item]: set_array[i][j]
-            });
-          }
-        }
-        */
-        console.log(this.data.states);
+    this.initSet(); //initial set for the game
+
+    /**
+    //init for test
+    let set_array = [[0, 202, 403, 0], [8, 402, 201, 0], [32, 0, 16, 203], [64, 256, 1024, 512]];
+    for (let i = 0; i < grid_per_edge; i++) {
+      for (let j = 0; j < grid_per_edge; j++) {
+        let data_item = this.getStatesItemString(i, j);
+        this.setData({
+          [data_item]: set_array[i][j]
+        });
       }
     }
+    */
+    console.log(this.data.states);
   },
 
-  onUnload: function (options) {
-    console.log('now is unload');
-
-  },
-
-  onHide: function (options) {
-    console.log('now is unHide');
+  sumbitRecord: function () {
     wx.request({
       url: "https://chuzm15.iterator-traits.com/record?id=" + app.globalData.openid + "&best=" + this.data.best_score,
       method: "GET",
@@ -122,6 +112,16 @@ Page({
       }
 
     });
+  },
+
+  onUnload: function (options) {
+    console.log('now is unload');
+    this.sumbitRecord();
+  },
+
+  onHide: function (options) {
+    console.log('now is unHide');
+    this.sumbitRecord();
   },
 
   //get the states array's item string
