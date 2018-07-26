@@ -219,21 +219,33 @@ Page({
             grids[index] = 402;
           }
         } else {
-          let new_score = this.data.current_score + 8;
-          this.setData({
-            current_score: new_score
-          });
           //both type 3 get the very strong effect
           if (grids[index] % 10 === 3 && grids[index+1] % 10 === 3) {
             if (index === 0) {
+              let new_score = this.data.current_score + 16;
+              this.setData({
+                current_score: new_score
+              });
               grids[index] = 16; //when they're the head of array, double them
             } else { //else double the front one
+              let new_score = this.data.current_score + 8 + grids[index-1]*2;
+              this.setData({
+                current_score: new_score
+              });
               grids[index-1] *= 2;
               grids[index] = 8;
             }
           } else if ((grids[index] % 10) + (grids[index+1] % 10) === 3) { //a+b=1+2(or 2+1) = 3
+            let new_score = this.data.current_score + 8;
+            this.setData({
+              current_score: new_score
+            });
             grids[index] = 203; //different type of 4(type 1 and 2) generate 2 of type 3  
           } else { //else merge to 8
+            let new_score = this.data.current_score + 8;
+            this.setData({
+              current_score: new_score
+            });
             grids[index] = 8;
           }
         }

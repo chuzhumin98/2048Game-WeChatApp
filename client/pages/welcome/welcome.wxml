@@ -1,9 +1,9 @@
 <!--index.wxml-->
 <view>
   <view>
-   <image src="/video/demo.gif" class='demo_gif'></image>
+   <image src="/video/demo.gif" class='demo_gif' style='width:{{image_width}}rpx;height:{{image_height}}rpx;'></image>
   </view>
   <view>
-    <button type='primary' style='width:300rpx;' catchtap='onStartGame'>开始游戏</button>
+    <button type='primary' style='width:300rpx;height:90rpx;' catchtap='onStartGame'>开始游戏</button>
   </view>
 </view>

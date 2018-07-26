@@ -1,15 +1,17 @@
 //app.js
 App({
   globalData: {
-    openid: null
+    openid: null,
+    window_width: null,
+    window_height: null
   },
 
   onLaunch: function () {
     wx.clearStorageSync(); //clear user's local cache
     // 展示本地存储能力
-    let logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+    let logs = wx.getStorageSync('logs') || [];
+    logs.unshift(Date.now());
+    wx.setStorageSync('logs', logs);
 
     // 登录
     wx.login({
@@ -38,6 +40,6 @@ App({
           }
         });
       }
-    })
+    });
   }
 })
