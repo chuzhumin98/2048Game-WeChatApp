@@ -232,7 +232,17 @@ Page({
               this.setData({
                 current_score: new_score
               });
-              grids[index-1] *= 2;
+              if (intDiv(grids[index-1], 10) === 20) {
+                if (grids[index-1] !== 203) {
+                  grids[index-1] = 401;
+                } else {
+                  grids[index-1] = 403;
+                }
+              } else if (intDiv(grids[index-1], 10) === 40) {
+                grids[index-1] = 8;
+              } else {
+                grids[index-1] *= 2;
+              }
               grids[index] = 8;
             }
           } else if ((grids[index] % 10) + (grids[index+1] % 10) === 3) { //a+b=1+2(or 2+1) = 3
